@@ -226,8 +226,25 @@
 
           this.playlist[index].bitrate = bootinfo.bitrate;
           this.playlist[index].platform = bootinfo.platform;
-
           this.setMediaURI(msg.data.url, msg.data.id);
+
+          try {
+            let mediaUrl = msg.data.url;
+            let fileType = mediaUrl.substr(mediaUrl.lastIndexOf('.')+1);
+            let extensionIdx = fileType.lastIndexOf("?");
+            if (extensionIdx > -1) {
+              fileType = fileType.substring(0, extensionIdx)
+            }
+            chrome.downloads.download({
+              url: mediaUrl,
+              filename: `./audio/${msg.data.title}——${msg.data.artist}.${fileType}`,
+              conflictAction : "prompt"
+            });
+            console.log(`Audio完成${msg.data.title}——${msg.data.artist}`);
+          } catch (e) {
+            console.log(e);
+          }
+
           this.setAudioDisabled(false, msg.data.index);
           this.finishLoad(msg.data.index, playNow);
           playerSendMessage(this.mode, msg);
