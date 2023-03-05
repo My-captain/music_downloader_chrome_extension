@@ -1,5 +1,5 @@
 {
-  "name": "listen1_chrome_extension",
+  "name": "musicdownloader_chrome_extension",
   "version": "2.27.0",
   "description": "one for all free music in china",
   "main": "index.js",
