@@ -672,25 +672,25 @@ angular.module('listenone').controller('PlayController', [
                             }
 
                             // TODO: 此处下载歌词
-                            let msg = $scope.songInfo;
+                            let msg = $scope.currentPlaying;
                             try {
                                 localStorage.setItem(`downloadKeyUUID`, crypto.randomUUID());
                                 chrome.downloads.download({
-                                    url: `data:,${JSON.stringify(msg.data)}`,
-                                    filename: `./metaInfo/${msg.data.currentPlaying.title}——${msg.data.currentPlaying.artist}.json`,
+                                    url: `data:,${JSON.stringify(msg)}`,
+                                    filename: `./metaInfo/${msg.title}——${msg.artist}.json`,
                                     conflictAction: "prompt"
                                 });
-                                console.log(`Meta完成${msg.data.currentPlaying.title}——${msg.data.currentPlaying.artist}`);
+                                console.log(`Meta完成${msg.title}——${msg.artist}`);
                             } catch (e) {
                                 console.log(e);
                             }
                             try {
                                 chrome.downloads.download({
                                     url: `data:,${lyric}`,
-                                    filename: `./lyric/${msg.data.currentPlaying.title}——${msg.data.currentPlaying.artist}.txt`,
+                                    filename: `./lyric/${msg.title}——${msg.artist}.txt`,
                                     conflictAction: "prompt"
                                 });
-                                console.log(`Lyric完成${msg.data.currentPlaying.title}——${msg.data.currentPlaying.artist}`);
+                                console.log(`Lyric完成${msg.title}——${msg.artist}`);
                             } catch (e) {
                                 console.log(e);
                             }
