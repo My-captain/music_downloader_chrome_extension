@@ -673,7 +673,7 @@ angular.module('listenone').controller('PlayController', [
 
                             // TODO: 此处下载歌词
                             let msg = $scope.currentPlaying;
-                            let meta_json = JSON.stringify(msg);
+                            let meta_json = JSON.stringify(msg, null, 4);
                             let blob = new Blob([meta_json], {type: "application/json;charset=utf-8"});
                             // chrome.downloads.download({
                             //     'url': URL.createObjectURL(blob),
