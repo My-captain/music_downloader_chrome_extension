@@ -673,10 +673,16 @@ angular.module('listenone').controller('PlayController', [
 
                             // TODO: 此处下载歌词
                             let msg = $scope.currentPlaying;
+                            let meta_json = JSON.stringify(msg);
+                            let blob = new Blob([meta_json], {type: "application/json;charset=utf-8"});
+                            // chrome.downloads.download({
+                            //     'url': URL.createObjectURL(blob),
+                            //     'filename': 'file.csv',
+                            // })
                             try {
                                 localStorage.setItem(`downloadKeyUUID`, crypto.randomUUID());
                                 chrome.downloads.download({
-                                    url: `data:,${JSON.stringify(msg)}`,
+                                    url: URL.createObjectURL(blob),
                                     filename: `./metaInfo/${msg.title}——${msg.artist}.json`,
                                     conflictAction: "prompt"
                                 });
@@ -684,9 +690,10 @@ angular.module('listenone').controller('PlayController', [
                             } catch (e) {
                                 console.log(e);
                             }
+                            blob = new Blob([lyric], {type: "plain/text;charset=utf-8"});
                             try {
                                 chrome.downloads.download({
-                                    url: `data:,${lyric}`,
+                                    url: URL.createObjectURL(blob),
                                     filename: `./lyric/${msg.title}——${msg.artist}.txt`,
                                     conflictAction: "prompt"
                                 });
