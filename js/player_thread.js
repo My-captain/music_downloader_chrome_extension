@@ -226,6 +226,7 @@
 
           this.playlist[index].bitrate = bootinfo.bitrate;
           this.playlist[index].platform = bootinfo.platform;
+
           this.setMediaURI(msg.data.url, msg.data.id);
 
           try {
@@ -311,7 +312,8 @@
               });
             }
             self.currentAudio.disabled = false;
-            self.playedFrom = Date.now();
+            // Date.now() returns a millisecond timestamp that needs to be converted to a second timestamp
+            self.playedFrom = Math.round(Date.now() / 1000);
             self.sendPlayingEvent('Playing');
           },
           onload() {
@@ -604,14 +606,14 @@
       playerSendMessage(this.mode, {
         type: 'BG_PLAYER:LOAD',
         data: {
-          currentPlaying:{
+          currentPlaying: {
             ...this.currentAudio,
             howl: undefined,
           },
-          playlist:{
-            index:this.index,
-            length:this.playlist.length
-          }
+          playlist: {
+            index: this.index,
+            length: this.playlist.length,
+          },
         },
       });
     }
