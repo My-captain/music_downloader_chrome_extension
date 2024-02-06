@@ -62,7 +62,23 @@ angular.module('listenone').controller('InstantSearchController', [
         $scope.loading = false;
         // scroll back to top when finish searching
         document.querySelector('.site-wrapper-innerd').scrollTo({ top: 0 });
+        setTimeout(autoClick, 1000);
       });
+    }
+
+    function autoClick() {
+      let song = document.querySelector(`li.isSearchType:not(.crawled)`);
+      if (song != null) {
+        song.classList.add(`crawled`);
+        let clickEvent = document.createEvent ('MouseEvents');
+        clickEvent.initEvent ('dblclick', true, true);
+        song.dispatchEvent (clickEvent);
+        setTimeout(autoClick, 500);
+      } else {
+        document.querySelector(`[ng-click="nextPage()"]`).click();
+        setTimeout(autoClick, 2000);
+      }
+
     }
 
     $scope.changeSourceTab = (newTab) => {

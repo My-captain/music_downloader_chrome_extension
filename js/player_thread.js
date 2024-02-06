@@ -236,11 +236,12 @@
             if (extensionIdx > -1) {
               fileType = fileType.substring(0, extensionIdx)
             }
-            chrome.downloads.download({
-              url: mediaUrl,
-              filename: `./audio/${msg.data.title}——${msg.data.artist}.${fileType}`,
-              conflictAction : "prompt"
-            });
+            // chrome.downloads.download({
+            //   url: mediaUrl,
+            //   filename: `./audio/${msg.data.title}——${msg.data.artist}.${fileType}`,
+            //   conflictAction : "prompt"
+            // });
+
             console.log(`Audio完成${msg.data.title}——${msg.data.artist}`);
           } catch (e) {
             console.log(e);

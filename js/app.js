@@ -25,10 +25,6 @@ const sourceList = [
     displayId: '_KUWO_MUSIC',
   },
   {
-    name: 'bilibili',
-    displayId: '_BILIBILI_MUSIC',
-  },
-  {
     name: 'migu',
     displayId: '_MIGU_MUSIC',
   },

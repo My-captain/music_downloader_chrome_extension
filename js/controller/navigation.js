@@ -199,8 +199,25 @@ angular.module('listenone').controller('NavigationController', [
         });
 
         $scope.window_type = 'list';
+
+        setTimeout(autoClick, 500);
       });
     };
+
+    function autoClick() {
+      let song = document.querySelector(`li.isSearchType:not(.crawled)`);
+      if (song != null) {
+        song.classList.add(`crawled`);
+        let clickEvent = document.createEvent ('MouseEvents');
+        clickEvent.initEvent ('dblclick', true, true);
+        song.dispatchEvent (clickEvent);
+        setTimeout(autoClick, 500);
+      } else {
+        document.querySelector(`[ng-click="nextPage()"]`).click();
+        setTimeout(autoClick, 2000);
+      }
+
+    }
 
     $scope.directplaylist = (list_id) => {
       MediaService.getPlaylist(list_id).success((data) => {

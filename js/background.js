@@ -64,22 +64,6 @@ function hack_referer_header(details) {
   }
 
   if (
-    details.url.includes('.bilibili.com/') ||
-    details.url.includes('.bilivideo.com/')
-  ) {
-    referer_value = 'https://www.bilibili.com/';
-    replace_origin = false;
-    add_origin = false;
-  }
-
-  if (details.url.includes('.bilivideo.cn')) {
-    referer_value = 'https://www.bilibili.com/';
-    origin_value = 'https://www.bilibili.com/';
-    add_referer = true;
-    add_origin = true;
-  }
-
-  if (
     details.url.includes('.taihe.com/') ||
     details.url.includes('music.91q.com')
   ) {
@@ -171,9 +155,6 @@ const urls = [
   '*://c.y.qq.com/*',
   '*://*.kugou.com/*',
   '*://*.kuwo.cn/*',
-  '*://*.bilibili.com/*',
-  '*://*.bilivideo.com/*',
-  '*://*.bilivideo.cn/*',
   '*://*.migu.cn/*',
   '*://*.githubusercontent.com/*',
 ];

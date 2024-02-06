@@ -39,13 +39,6 @@ const PROVIDERS = [
     id: 'kw',
   },
   {
-    name: 'bilibili',
-    instance: bilibili,
-    searchable: true,
-    support_login: false,
-    id: 'bi',
-  },
-  {
     name: 'migu',
     instance: migu,
     searchable: true,
