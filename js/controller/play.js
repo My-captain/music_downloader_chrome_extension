@@ -73,6 +73,7 @@ angular.module('listenone').controller('PlayController', [
     $scope.currentDuration = '0:00';
     $scope.currentDurationSeconds = 0;
     $scope.currentPosition = '0:00';
+    $scope.downloadedSet
 
     $scope.currentIndex = 0;
     $scope.staged_playlist = [];
@@ -671,33 +672,49 @@ angular.module('listenone').controller('PlayController', [
                 return;
               }
 
+              let downloadedJson = localStorage.getItem(`downloadedJson`);
+              if (downloadedJson != null) {
+                console.log(`恢复json、lyric`);
+                localStorage.removeItem(`downloadedJson`);
+                $scope.downloadedSet = new Set(downloadedJson.split(`\n`));
+              }
+              if (!$scope.hasOwnProperty(`downloadedSet`)) {
+                $scope.downloadedSet = new Set();
+              }
+
               // TODO: 此处下载歌词
               let msg = $scope.currentPlaying;
               let meta_json = JSON.stringify(msg, null, 4);
               let blob = new Blob([meta_json], {type: "application/json;charset=utf-8"});
-              // chrome.downloads.download({
-              //     'url': URL.createObjectURL(blob),
-              //     'filename': 'file.csv',
-              // })
               try {
                 localStorage.setItem(`downloadKeyUUID`, crypto.randomUUID());
-                // chrome.downloads.download({
-                //   url: URL.createObjectURL(blob),
-                //   filename: `./metaInfo/${msg.title}——${msg.artist}.json`,
-                //   conflictAction: "prompt"
-                // });
-                console.log(`Meta完成${msg.title}——${msg.artist}`);
+                let fileName = `${msg.title}——${msg.artist}.json`;
+                fileName = fileName.replaceAll("/", "_");
+                if (!$scope.downloadedSet.has(fileName)) {
+                  $scope.downloadedSet.add(fileName);
+                  chrome.downloads.download({
+                    url: URL.createObjectURL(blob),
+                    filename: `./metaInfo/${fileName}`,
+                    conflictAction: "overwrite"
+                  });
+                  console.log(`Meta完成${fileName}`);
+                }
               } catch (e) {
                 console.log(e);
               }
               blob = new Blob([lyric], {type: "plain/text;charset=utf-8"});
               try {
-                // chrome.downloads.download({
-                //   url: URL.createObjectURL(blob),
-                //   filename: `./lyric/${msg.title}——${msg.artist}.txt`,
-                //   conflictAction: "prompt"
-                // });
-                console.log(`Lyric完成${msg.title}——${msg.artist}`);
+                let fileName = `${msg.title}——${msg.artist}.txt`;
+                fileName = fileName.replaceAll("/", "_");
+                if (!$scope.downloadedSet.has(fileName)) {
+                  $scope.downloadedSet.add(fileName);
+                  chrome.downloads.download({
+                    url: URL.createObjectURL(blob),
+                    filename: `./lyric/${fileName}`,
+                    conflictAction: "overwrite"
+                  });
+                  console.log(`Lyric:${fileName}`);
+                }
               } catch (e) {
                 console.log(e);
               }

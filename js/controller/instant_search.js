@@ -47,6 +47,10 @@ angular.module('listenone').controller('InstantSearchController', [
     }
 
     function performSearch() {
+      let downloaded = localStorage.getItem(`downloaded_items`);
+      if (downloaded != null) {
+
+      }
       $rootScope.$broadcast('search:keyword_change', $scope.keywords);
       MediaService.search($scope.tab, {
         keywords: $scope.keywords,
@@ -62,7 +66,9 @@ angular.module('listenone').controller('InstantSearchController', [
         $scope.loading = false;
         // scroll back to top when finish searching
         document.querySelector('.site-wrapper-innerd').scrollTo({ top: 0 });
-        setTimeout(autoClick, 1000);
+        if ($scope.searchType === 0) {
+          setTimeout(autoClick, 2000);
+        }
       });
     }
 
@@ -70,13 +76,14 @@ angular.module('listenone').controller('InstantSearchController', [
       let song = document.querySelector(`li.isSearchType:not(.crawled)`);
       if (song != null) {
         song.classList.add(`crawled`);
+        song.scrollIntoView({behavior: 'smooth'});
         let clickEvent = document.createEvent ('MouseEvents');
         clickEvent.initEvent ('dblclick', true, true);
         song.dispatchEvent (clickEvent);
-        setTimeout(autoClick, 500);
+        setTimeout(autoClick, 600);
       } else {
+        // 翻页
         document.querySelector(`[ng-click="nextPage()"]`).click();
-        setTimeout(autoClick, 2000);
       }
 
     }

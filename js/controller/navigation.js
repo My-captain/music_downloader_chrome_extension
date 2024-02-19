@@ -199,8 +199,7 @@ angular.module('listenone').controller('NavigationController', [
         });
 
         $scope.window_type = 'list';
-
-        setTimeout(autoClick, 500);
+        setTimeout(autoClick, 2000);
       });
     };
 
@@ -208,15 +207,15 @@ angular.module('listenone').controller('NavigationController', [
       let song = document.querySelector(`li.isSearchType:not(.crawled)`);
       if (song != null) {
         song.classList.add(`crawled`);
+        song.scrollIntoView({behavior: 'smooth'});
         let clickEvent = document.createEvent ('MouseEvents');
         clickEvent.initEvent ('dblclick', true, true);
         song.dispatchEvent (clickEvent);
-        setTimeout(autoClick, 500);
+        setTimeout(autoClick, 600);
       } else {
+        // 翻页
         document.querySelector(`[ng-click="nextPage()"]`).click();
-        setTimeout(autoClick, 2000);
       }
-
     }
 
     $scope.directplaylist = (list_id) => {

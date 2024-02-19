@@ -18,7 +18,6 @@
       "js/provider/netease.js",
       "js/provider/kugou.js",
       "js/provider/kuwo.js",
-      "js/provider/bilibili.js",
       "js/provider/migu.js",
       "js/provider/taihe.js",
       "js/provider/localmusic.js",

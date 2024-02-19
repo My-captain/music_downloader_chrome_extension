@@ -17,6 +17,7 @@
       this.playedFrom = 0;
       this.mode = 'background';
       this.skipTime = 15;
+      this.downloadedSet = new Set();
     }
 
     setMode(newMode) {
@@ -50,6 +51,7 @@
     }
 
     insertAudio(audio, idx) {
+      this.playlist = [];
       if (this.playlist.find((i) => audio.id === i.id)) return;
 
       const audioData = {
@@ -220,8 +222,12 @@
       MediaService.bootstrapTrack(
         msg.data,
         (bootinfo) => {
+          let downloadedAudio = localStorage.getItem(`downloadedAudio`);
+          if (downloadedAudio != null) {
+            localStorage.removeItem(`downloadedAudio`);
+            this.downloadedSet = new Set(downloadedAudio.split(`\n`));
+          }
           msg.type = 'BG_PLAYER:RETRIEVE_URL_SUCCESS';
-
           msg.data = { ...msg.data, ...bootinfo };
 
           this.playlist[index].bitrate = bootinfo.bitrate;
@@ -236,13 +242,17 @@
             if (extensionIdx > -1) {
               fileType = fileType.substring(0, extensionIdx)
             }
-            // chrome.downloads.download({
-            //   url: mediaUrl,
-            //   filename: `./audio/${msg.data.title}——${msg.data.artist}.${fileType}`,
-            //   conflictAction : "prompt"
-            // });
-
-            console.log(`Audio完成${msg.data.title}——${msg.data.artist}`);
+            let fileName = `${msg.data.title}——${msg.data.artist}.${fileType}`;
+            fileName = fileName.replaceAll("/", "_");
+            if (!this.downloadedSet.has(fileName)) {
+              this.downloadedSet.add(fileName);
+              chrome.downloads.download({
+                url: mediaUrl,
+                filename: `./audio/${fileName}`,
+                conflictAction : "overwrite"
+              });
+              console.log(`Audio：${fileName}`);
+            }
           } catch (e) {
             console.log(e);
           }
